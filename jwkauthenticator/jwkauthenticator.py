@@ -89,7 +89,7 @@ class JSONWebTokenLoginHandler(BaseHandler):
             return jwt.decode(
                 token,
                 key=public_key,
-                algorithms=["RS256"],
+                algorithms=["ES256"],
                 audience=audience,
                 options=opts,
             )
