@@ -80,7 +80,7 @@ class JSONWebTokenLoginHandler(BaseHandler):
                 self.log.warn("Attempting to get jwks keys field, no keys found")
                 raise Exception("no keys found")
 
-            public_key = jwt.algorithms.RSAAlgorithm.from_jwk(
+            public_key = jwt.algorithms.ECAlgorithm.from_jwk(
                 json.dumps(jwks["keys"][0])
             )
 
