@@ -84,16 +84,22 @@ class JSONWebTokenLoginHandler(BaseHandler):
                 json.dumps(jwks["keys"][0])
             )
 
-            self.log.debug("public key ready")
+            self.log.debug("public key ready for decoding")
 
-            return jwt.decode(
+            decode = jwt.decode(
                 token,
                 key=public_key,
                 algorithms=["ES256"],
                 audience=audience,
                 options=opts,
             )
-        except:
+
+            print(json.dumps(decode, indent=2))
+
+            return decode
+        
+        except Exception as e:
+            self.log.error(f"JWT decoding failed: {str(e)}")
             raise web.HTTPError(401)
 
     def verify_jwt_using_secret(self, json_web_token, secret, audience):
