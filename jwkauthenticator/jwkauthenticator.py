@@ -80,7 +80,7 @@ class JSONWebTokenLoginHandler(BaseHandler):
                 self.log.warn("Attempting to get jwks keys field, no keys found")
                 raise Exception("no keys found")
 
-            public_key = jwt.algorithms.RSAAlgorithm.from_jwk(
+            public_key = jwt.algorithms.ECAlgorithm.from_jwk(
                 json.dumps(jwks["keys"][0])
             )
 
@@ -89,11 +89,12 @@ class JSONWebTokenLoginHandler(BaseHandler):
             return jwt.decode(
                 token,
                 key=public_key,
-                algorithms=["RS256"],
+                algorithms=["ES256"],
                 audience=audience,
                 options=opts,
             )
-        except:
+        except Exception as e:
+            self.log.error(f"JWT verification failed: {str(e)}")
             raise web.HTTPError(401)
 
     def verify_jwt_using_secret(self, json_web_token, secret, audience):
